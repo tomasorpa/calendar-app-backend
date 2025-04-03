@@ -26,9 +26,9 @@ const createEvent = async (req, res = response) => {
   }
 };
 const updateEvent = async (req, res = response) => {
-  const eventId = req.params.id;
+  const id = req.params.id;
   try {
-    const eventToUpdate = await Event.findById(eventId);
+    const eventToUpdate = await Event.findById(id);
 
     if (!eventToUpdate) {
       return res.status(404).json({
@@ -37,7 +37,7 @@ const updateEvent = async (req, res = response) => {
       });
     }
     if (eventToUpdate.user.toString() !== req.uid) {
-      return res.status(404).json({
+      return res.status(401).json({
         ok: false,
         msg: "You are not allowed to update an event which is not yours.",
       });
@@ -45,7 +45,7 @@ const updateEvent = async (req, res = response) => {
     const newEvent = {
       ...req.body,
     };
-    const event = await Event.findByIdAndUpdate(eventId, newEvent,{new:true});
+    const event = await Event.findByIdAndUpdate(id, newEvent, { new: true });
 
     return res.status(200).json({
       ok: true,
@@ -58,40 +58,33 @@ const updateEvent = async (req, res = response) => {
       msg: "Contact your provider.",
     });
   }
-
-  
 };
-const deleteEvent =async (req=request, res = response) => {
+const deleteEvent = async (req = request, res = response) => {
+  const id = req.params.id;
 
-  const eventId = req.params.id
-  
- try {
-  const eventToDelete=await Event.findById(eventId)
-   if (!eventToDelete) {
-     return res.status(404).json({
-       ok: false,
-       msg: "Event does not exist",
-     });
-   }
-   
-     if (eventToDelete.user.toString() !== req.uid) {
+  try {
+    const eventToDelete = await Event.findById(id);
+    if (!eventToDelete) {
       return res.status(404).json({
+        ok: false,
+        msg: "Event does not exist",
+      });
+    }
+
+    if (eventToDelete.user.toString() !== req.uid) {
+      return res.status(401).json({
         ok: false,
         msg: "You are not allowed to delete an event which is not yours",
       });
     }
-     await Event.findByIdAndDelete(eventId)
-
-
-
- } catch (error) {
-  console.error(error);
-  return res.status(500).json({
-    ok: false,
-    msg: "Contact your provider.",
-  });
- }
-
+    await Event.findByIdAndDelete(id);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      msg: "Contact your provider.",
+    });
+  }
 
   return res.status(201).json({
     ok: true,

@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const { dbConnection } = require("./database/config");
@@ -11,18 +12,10 @@ app.use(express.static("public"));
 
 app.use(express.json());
 
-//Routes AUTH
-
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/events", require("./routes/events"));
-//Routes AUTH
 
-//Routes AUTH
-
-app.get("/", (req, res) => {
-  res.json({
-    ok: true,
-  });
+app.use("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.html"));
 });
-
 app.listen(process.env.PORT);

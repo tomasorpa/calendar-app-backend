@@ -1,8 +1,9 @@
-const { parseISO, isValid } = require("date-fns");
+const { isValid, getTime } = require("date-fns");
 
 const isDate = (value) => {
   if (!value) return false;
-  const date = isValid(value);
+  const time = getTime(value);
+  const date = isValid(time);
   return date;
 };
 

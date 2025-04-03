@@ -19,6 +19,8 @@ const createUser = async (req, res = response) => {
         ok: true,
         msg: "User Created",
         token,
+        name: user.name,
+        uid: user.id,
       });
     }
     res.status(400).json({
@@ -38,15 +40,17 @@ const createUser = async (req, res = response) => {
 const loginUser = async (req, res = response) => {
   try {
     let user = await User.findOne({ email: req.body.email });
-    console.log(user);
     if (user) {
       const passwordMatch = compareSync(req.body.password, user.password);
       if (passwordMatch) {
         const token = await generateJWT(user.id, user.name);
+
         return res.status(200).json({
           ok: true,
           msg: "Login",
           token,
+          uid: user.id,
+          name: user.name,
         });
       }
       return res.status(401).json({
@@ -74,6 +78,8 @@ const renewToken = async (req, res = response) => {
     ok: true,
     msg: "Token Renewed",
     token,
+    uid,
+    name,
   });
 };
 module.exports = { createUser, loginUser, renewToken };

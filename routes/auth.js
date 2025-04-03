@@ -28,7 +28,7 @@ router.post(
 router.post(
   "/",
   [
-    check("email", "Email is incorrect").isEmail(),
+    check("email", "Email is not registered").isEmail(),
     check("password", "Password must have more than 5 characters").isLength({
       min: 6,
     }),
