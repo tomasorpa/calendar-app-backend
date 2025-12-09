@@ -4,7 +4,7 @@ const {
   createEvent,
   updateEvent,
   deleteEvent,
-} = require("../controllers/events");
+} = require("../api/controllers/events");
 const { validateJWT } = require("../middlewares/validateJwt");
 const { isDate } = require("../helpers/isDate");
 const { check } = require("express-validator");

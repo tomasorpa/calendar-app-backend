@@ -7,7 +7,11 @@ host + api/auth
 */
 
 const { Router } = require("express");
-const { createUser, loginUser, renewToken } = require("../controllers/auth");
+const {
+  createUser,
+  loginUser,
+  renewToken,
+} = require("../api/controllers/auth");
 const { check } = require("express-validator");
 const { validateFields } = require("../middlewares/validateFields");
 const { validateJWT } = require("../middlewares/validateJwt");
